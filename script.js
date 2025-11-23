@@ -1,3 +1,5 @@
+// RSA Previewer JavaScript
+
 document.addEventListener('DOMContentLoaded', () => {
     // State
     const state = {
@@ -57,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     refreshPreviewBtn.addEventListener('click', () => {
-        // Add a small rotation animation
+        // Small rotation animation
         refreshPreviewBtn.style.transform = 'rotate(360deg)';
         setTimeout(() => refreshPreviewBtn.style.transform = 'none', 300);
         updatePreview(true);
@@ -104,14 +106,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const div = document.createElement('div');
         div.className = 'asset-item';
 
+        const inputWrapper = document.createElement('div');
+        inputWrapper.className = 'input-wrapper';
+
         const input = document.createElement('input');
         input.type = 'text';
         input.value = value;
         input.placeholder = type === 'headline' ? `Headline ${index + 1}` : `Description ${index + 1}`;
-        input.maxLength = type === 'headline' ? 30 : 90;
+        const maxLength = type === 'headline' ? 30 : 90;
+        input.maxLength = maxLength;
+
+        const charCounter = document.createElement('span');
+        charCounter.className = 'char-counter';
+        charCounter.textContent = `${value.length}/${maxLength}`;
+
         input.addEventListener('input', (e) => {
             if (type === 'headline') state.headlines[index] = e.target.value;
             else state.descriptions[index] = e.target.value;
+            charCounter.textContent = `${e.target.value.length}/${maxLength}`;
+            // Color feedback
+            if (e.target.value.length >= maxLength) {
+                charCounter.classList.add('at-limit');
+            } else {
+                charCounter.classList.remove('at-limit');
+            }
             updatePreview();
         });
 
@@ -135,7 +153,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        div.appendChild(input);
+        inputWrapper.appendChild(input);
+        inputWrapper.appendChild(charCounter);
+        div.appendChild(inputWrapper);
         div.appendChild(removeBtn);
         return div;
     }
@@ -155,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updatePreview(randomize = false) {
-        // Update URL display
+        // URL display
         let domain = 'example.com';
         try {
             if (state.finalUrl) {
@@ -163,30 +183,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 domain = url.hostname;
                 favicon.src = `https://www.google.com/s2/favicons?domain=${domain}`;
             }
-        } catch (e) {
-            // Invalid URL, ignore
-        }
+        } catch (e) { /* ignore invalid URL */ }
         previewDisplayUrl.textContent = domain;
 
-        // Update Path
+        // Path
         let pathText = '';
         if (state.path1) pathText += ` › ${state.path1}`;
         if (state.path2) pathText += ` › ${state.path2}`;
         previewPath.textContent = pathText;
 
-        // Update Headlines
-        // Google shows up to 3 headlines
+        // Headlines (up to 3)
         const filledHeadlines = state.headlines.filter(h => h.trim() !== '');
         let selectedHeadlines = [];
-
         if (filledHeadlines.length > 0) {
             if (randomize) {
-                // Shuffle and pick 2 or 3
                 const shuffled = [...filledHeadlines].sort(() => 0.5 - Math.random());
                 const count = Math.random() > 0.5 ? 3 : 2;
                 selectedHeadlines = shuffled.slice(0, count);
             } else {
-                // Just pick first 3 for stability unless randomized
                 selectedHeadlines = filledHeadlines.slice(0, 3);
             }
         } else {
@@ -194,11 +208,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         previewHeadline.textContent = selectedHeadlines.join(' | ');
 
-        // Update Descriptions
-        // Google shows 1 or 2 descriptions
+        // Descriptions (1 or 2)
         const filledDescs = state.descriptions.filter(d => d.trim() !== '');
         let selectedDesc = '';
-
         if (filledDescs.length > 0) {
             if (randomize) {
                 const shuffled = [...filledDescs].sort(() => 0.5 - Math.random());
@@ -213,36 +225,37 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function addToExportList() {
-        // Validate
+        // Length validation
+        const longHeadlines = state.headlines.filter(h => h.length > 30);
+        const longDescriptions = state.descriptions.filter(d => d.length > 90);
+        if (longHeadlines.length > 0 || longDescriptions.length > 0) {
+            alert('All headlines must be ≤30 characters and all descriptions ≤90 characters before exporting.');
+            return;
+        }
+        // Final URL validation
         if (!state.finalUrl) {
             alert('Please enter a Final URL before adding to list.');
             return;
         }
-
         const adData = {
             'Final URL': state.finalUrl,
             'Path 1': state.path1,
             'Path 2': state.path2,
         };
-
-        // Add headlines
+        // Headlines
         for (let i = 0; i < 15; i++) {
             adData[`Headline ${i + 1}`] = state.headlines[i] || '';
         }
-
-        // Add descriptions
+        // Descriptions
         for (let i = 0; i < 4; i++) {
             adData[`Description ${i + 1}`] = state.descriptions[i] || '';
         }
-
         state.exportList.push(adData);
         listCount.textContent = state.exportList.length;
-
-        // Animation feedback
+        // Feedback animation
         addToListBtn.textContent = 'Added!';
         setTimeout(() => {
             addToListBtn.innerHTML = `Add to Export List <span class="badge" id="listCount">${state.exportList.length}</span>`;
-            // Re-bind element since innerHTML replaced it
             document.getElementById('listCount').textContent = state.exportList.length;
         }, 1000);
     }
@@ -252,29 +265,23 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('No ads in the export list. Add some ads first!');
             return;
         }
-
         const headers = Object.keys(state.exportList[0]);
         const csvRows = [];
-
-        // Header row
         csvRows.push(headers.join(','));
-
-        // Data rows
         for (const row of state.exportList) {
             const values = headers.map(header => {
-                const escaped = ('' + row[header]).replace(/"/g, '\\"');
+                const escaped = ('' + row[header]).replace(/"/g, '""');
                 return `"${escaped}"`;
             });
             csvRows.push(values.join(','));
         }
-
         const csvString = csvRows.join('\n');
-        const blob = new Blob([csvString], { type: 'text/csv' });
-        const url = window.URL.createObjectURL(blob);
+        const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.setAttribute('hidden', '');
         a.setAttribute('href', url);
-        a.setAttribute('download', 'google_ads_rsa_export.csv');
+        a.setAttribute('download', 'rsa_ads_export.csv');
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);

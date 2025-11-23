@@ -9,7 +9,6 @@
     --input-bg: rgba(15, 23, 42, 0.6);
     --danger-color: #ef4444;
     --success-color: #22c55e;
-
     /* Google Ad Colors */
     --ad-blue: #8ab4f8;
     --ad-green: #202124;
@@ -108,6 +107,7 @@ body {
     font-weight: 700;
     background: linear-gradient(to right, #fff, #94a3b8);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -201,28 +201,7 @@ input:focus {
 .asset-count {
     font-size: 0.75rem;
     color: var(--text-muted);
-    background: rgba(255, 255, 255, 0.05);
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-}
-
-.asset-item {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 0.75rem;
-    animation: slideIn 0.2s ease-out;
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    transform: translateY(-10px);
 }
 
 .remove-btn {
@@ -289,27 +268,6 @@ input:focus {
 
 .btn-icon {
     padding: 0.5rem;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--text-color);
-}
-
-.btn-icon:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: rotate(180deg);
-}
-
-.badge {
-    background: rgba(0, 0, 0, 0.2);
-    padding: 0.1rem 0.4rem;
-    border-radius: 4px;
-    font-size: 0.75rem;
-}
-
-/* Preview Section */
-.preview-section {
-    position: sticky;
-    top: 2rem;
 }
 
 .preview-controls {
@@ -345,7 +303,6 @@ input:focus {
 /* Ad Preview Card */
 .preview-card {
     background: #202124;
-    /* Google Dark Mode BG */
     border: 1px solid #3c4043;
     min-height: 300px;
     display: flex;
@@ -358,7 +315,6 @@ input:focus {
     font-family: 'Roboto', arial, sans-serif;
     width: 100%;
     max-width: 600px;
-    /* Desktop max width */
     text-align: left;
 }
 
@@ -372,10 +328,8 @@ input:focus {
     font-size: 0.875rem;
     margin-bottom: 0.25rem;
     display: none;
-    /* Google often hides this or changes it */
 }
 
-/* Actually, "Sponsored" is usually black bold text now */
 .ad-label {
     display: block;
     color: #bdc1c6;
@@ -456,14 +410,4 @@ input:focus {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-}
-
-.ad-link {
-    color: #8ab4f8;
-    font-size: 14px;
-    text-decoration: none;
-}
-
-.ad-link:hover {
-    text-decoration: underline;
 }
