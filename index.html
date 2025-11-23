@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google RSA Ads Previewer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <main class="app-container">
+        <header class="app-header">
+            <h1>RSA Previewer</h1>
+            <div class="header-actions">
+                <button id="exportBtn" class="btn btn-secondary">Export CSV</button>
+                <button id="addToListBtn" class="btn btn-primary">Add to Export List <span id="listCount"
+                        class="badge">0</span></button>
+            </div>
+        </header>
+
+        <div class="content-grid">
+            <!-- Input Section -->
+            <section class="input-section glass-panel">
+                <h2>Ad Details</h2>
+                <form id="adForm">
+                    <div class="form-group">
+                        <label for="finalUrl">Final URL</label>
+                        <input type="url" id="finalUrl" placeholder="https://www.example.com" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="path1">Display Path 1</label>
+                            <input type="text" id="path1" placeholder="Services" maxlength="15">
+                        </div>
+                        <div class="form-group">
+                            <label for="path2">Display Path 2</label>
+                            <input type="text" id="path2" placeholder="Consulting" maxlength="15">
+                        </div>
+                    </div>
+
+                    <div class="assets-container">
+                        <div class="assets-header">
+                            <h3>Headlines</h3>
+                            <span class="asset-count" id="headlineCount">0/15</span>
+                        </div>
+                        <div id="headlinesList" class="assets-list">
+                            <!-- Dynamic Headlines -->
+                        </div>
+                        <button type="button" id="addHeadlineBtn" class="btn btn-ghost">+ Add Headline</button>
+                    </div>
+
+                    <div class="assets-container">
+                        <div class="assets-header">
+                            <h3>Descriptions</h3>
+                            <span class="asset-count" id="descCount">0/4</span>
+                        </div>
+                        <div id="descriptionsList" class="assets-list">
+                            <!-- Dynamic Descriptions -->
+                        </div>
+                        <button type="button" id="addDescBtn" class="btn btn-ghost">+ Add Description</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Preview Section -->
+            <section class="preview-section">
+                <div class="preview-controls">
+                    <div class="device-toggle">
+                        <button class="toggle-btn active" data-device="mobile">Mobile</button>
+                        <button class="toggle-btn" data-device="desktop">Desktop</button>
+                    </div>
+                    <button id="refreshPreviewBtn" class="btn btn-icon" title="Refresh Variation">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="preview-card glass-panel">
+                    <div class="ad-preview mobile" id="adPreview">
+                        <div class="ad-label">Sponsored</div>
+                        <div class="ad-header">
+                            <div class="ad-icon">
+                                <img src="https://www.google.com/s2/favicons?domain=example.com" alt="" id="favicon">
+                            </div>
+                            <div class="ad-url-group">
+                                <span class="ad-display-name" id="previewDisplayUrl">example.com</span>
+                                <span class="ad-display-path" id="previewPath"></span>
+                            </div>
+                            <div class="ad-menu-dots"></div>
+                        </div>
+                        <div class="ad-headline" id="previewHeadline">Headline 1 | Headline 2 | Headline 3</div>
+                        <div class="ad-description" id="previewDescription">Description text goes here. It should be
+                            long enough to demonstrate how it wraps on different devices.</div>
+                        <!-- Sitelinks extension placeholder (optional for visual completeness) -->
+                        <div class="ad-extensions">
+                            <span class="ad-link">Site Link 1</span>
+                            <span class="ad-link">Site Link 2</span>
+                            <span class="ad-link">Site Link 3</span>
+                            <span class="ad-link">Site Link 4</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
