@@ -106,32 +106,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const div = document.createElement('div');
         div.className = 'asset-item';
 
-        const inputWrapper = document.createElement('div');
-        inputWrapper.className = 'input-wrapper';
+        // Header with label and remove button
+        const header = document.createElement('div');
+        header.className = 'asset-header-row';
 
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.value = value;
-        input.placeholder = type === 'headline' ? `Headline ${index + 1}` : `Description ${index + 1}`;
+        const labelWrapper = document.createElement('div');
+        labelWrapper.className = 'asset-label-wrapper';
+
+        const label = document.createElement('label');
+        label.textContent = type === 'headline' ? `Headline ${index + 1}` : `Description ${index + 1}`;
+        label.className = 'asset-label';
+
         const maxLength = type === 'headline' ? 30 : 90;
-        input.maxLength = maxLength;
-
         const charCounter = document.createElement('span');
         charCounter.className = 'char-counter';
         charCounter.textContent = `${value.length}/${maxLength}`;
 
-        input.addEventListener('input', (e) => {
-            if (type === 'headline') state.headlines[index] = e.target.value;
-            else state.descriptions[index] = e.target.value;
-            charCounter.textContent = `${e.target.value.length}/${maxLength}`;
-            // Color feedback
-            if (e.target.value.length >= maxLength) {
-                charCounter.classList.add('at-limit');
-            } else {
-                charCounter.classList.remove('at-limit');
-            }
-            updatePreview();
-        });
+        labelWrapper.appendChild(label);
+        labelWrapper.appendChild(charCounter);
 
         const removeBtn = document.createElement('button');
         removeBtn.className = 'remove-btn';
@@ -153,10 +145,32 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        inputWrapper.appendChild(input);
-        inputWrapper.appendChild(charCounter);
-        div.appendChild(inputWrapper);
-        div.appendChild(removeBtn);
+        header.appendChild(labelWrapper);
+        header.appendChild(removeBtn);
+
+        // Input field
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = value;
+        input.placeholder = type === 'headline' ? `Enter headline ${index + 1}` : `Enter description ${index + 1}`;
+        input.maxLength = maxLength;
+        input.className = 'asset-input';
+
+        input.addEventListener('input', (e) => {
+            if (type === 'headline') state.headlines[index] = e.target.value;
+            else state.descriptions[index] = e.target.value;
+            charCounter.textContent = `${e.target.value.length}/${maxLength}`;
+            // Color feedback
+            if (e.target.value.length >= maxLength) {
+                charCounter.classList.add('at-limit');
+            } else {
+                charCounter.classList.remove('at-limit');
+            }
+            updatePreview();
+        });
+
+        div.appendChild(header);
+        div.appendChild(input);
         return div;
     }
 
