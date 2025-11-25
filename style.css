@@ -411,3 +411,7 @@ input:focus {
     flex-wrap: wrap;
     gap: 12px;
 }
+/* Text overflow fixes */
+.ad-url-group { flex: 1; min-width: 0; }
+.ad-display-name, .ad-display-path, .ad-headline, .ad-description { overflow-wrap: break-word; word-break: break-word; }
+.ad-menu-dots { flex-shrink: 0; }
