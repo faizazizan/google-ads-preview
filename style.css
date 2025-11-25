@@ -415,3 +415,10 @@ input:focus {
 .ad-url-group { flex: 1; min-width: 0; }
 .ad-display-name, .ad-display-path, .ad-headline, .ad-description { overflow-wrap: break-word; word-break: break-word; }
 .ad-menu-dots { flex-shrink: 0; }
+
+/* Character counter and input wrapper styles */
+.asset-item { display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.75rem; }
+.input-wrapper { position: relative; flex: 1; }
+.input-wrapper input { width: 100%; padding-right: 4rem; }
+.char-counter { position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); font-size: 0.75rem; color: var(--text-muted); pointer-events: none; }
+.char-counter.at-limit { color: var(--danger-color); font-weight: 600; }
